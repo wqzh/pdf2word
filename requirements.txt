@@ -1,0 +1,8 @@
+# pdf2docx.py 运行依赖
+# 安装: pip install -r requirements.txt
+# 验证环境: Python 3.11.9 (Windows 10)
+
+pdfplumber>=0.10.0     # PDF 页面/字符/表格/线条/图片解析
+python-docx>=1.0.0     # 生成 .docx
+pillow>=9.0.0          # 图片解码与 PNG 编码
+pypdf>=3.0.0           # 加密/损坏 PDF 的兜底重写

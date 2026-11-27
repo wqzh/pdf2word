@@ -1,0 +1,37 @@
+data-local/s
+RUN_CMD.md
+
+
+.cowork-temp/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# 运行时
+data/
+data-local/
+*.log
+.env
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# 构建产物与依赖
+node_modules/
+dist/
+target/
+*.jar
+.venv/
+__pycache__/
+*.pyc
+.turbo/
+.pnpm-store/
+coverage/
