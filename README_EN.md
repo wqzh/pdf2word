@@ -42,7 +42,19 @@ A single-file, self-contained implementation (`pdf2docx.py`) that only relies on
 
 `concurrent.futures`, `argparse`, `json`, `logging`, etc. are part of the standard library and need no extra installation.
 
-### Install
+### Pypi
+```shell
+# https://pypi.org/project/pdf2word-pro/0.1.0/
+pip install pdf2word-pro==0.1.0
+pdf2word-pro --help
+pdf2word-pro input.pdf -o  output.docx
+# python -m pdf2word-pro input.pdf -o  output.docx
+
+## from pdf2word_pro import Config, pdf_to_docx
+```
+
+
+### Local Install
 
 ```shell
 pip install -r requirements.txt
