@@ -230,3 +230,5 @@ src/pdf2word_pro/         包源码
   __main__.py             python -m 入口
   __init__.py             对外接口
 ```
+
+发布到 PyPI / TestPyPI 的完整步骤见 [docs/PUBLISHING.md](https://github.com/wqzh/pdf2word/blob/main/docs/PUBLISHING.md)。

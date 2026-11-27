@@ -230,3 +230,5 @@ src/pdf2word_pro/        package source
   __main__.py            python -m entry
   __init__.py            public API
 ```
+
+See [docs/PUBLISHING.md](https://github.com/wqzh/pdf2word/blob/main/docs/PUBLISHING.md) for the full PyPI / TestPyPI release guide.
