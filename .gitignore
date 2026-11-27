@@ -35,3 +35,14 @@ __pycache__/
 .turbo/
 .pnpm-store/
 coverage/
+
+# 打包与中间文件
+build/
+*.egg-info/
+.eggs/
+.pkgtest/
+_pdf2word_pages/
+*.whl.tmp
+
+# 仓库根目录下的临时脚本（不以 / 开头会误伤 src/**/__init__.py）
+/_*.py

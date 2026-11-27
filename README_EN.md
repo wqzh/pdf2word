@@ -1,11 +1,10 @@
-[中文](README.md) | [English](README_EN.md)
+[中文](https://github.com/wqzh/pdf2word/blob/main/README.md) | [English](https://github.com/wqzh/pdf2word/blob/main/README_EN.md)
 
-
-# pdf2docx.py
+# pdf2word-pro
 
 A command-line tool that converts PDF into Word (`.docx`) while trying hard to **preserve the original layout**: paragraphs, fonts and sizes, tables (including merged cells and shading), images (including side-by-side figures and their captions), headers and footers, page breaks and page sizes.
 
-A single-file, self-contained implementation (`pdf2docx.py`) that only relies on `pdfplumber` for low-level PDF parsing and `python-docx` for assembling the Word document.
+A pure-Python implementation that only relies on `pdfplumber` for low-level PDF parsing and `python-docx` for assembling the Word document. After installation the command is `pdf2word-pro`; `python -m pdf2word_pro` also works, and the legacy `python pdf2docx.py` entry point is kept in the repository.
 
 ---
 
@@ -45,7 +44,14 @@ A single-file, self-contained implementation (`pdf2docx.py`) that only relies on
 ### Install
 
 ```shell
+pip install pdf2word-pro
+```
+
+From source (development):
+
+```shell
 pip install -r requirements.txt
+pip install -e .
 ```
 
 ---
@@ -53,13 +59,13 @@ pip install -r requirements.txt
 ## 3. Quick start
 
 ```shell
-python pdf2docx.py input.pdf
+pdf2word-pro input.pdf
 ```
 
 Without `-o`, the output is a `.docx` with the same name next to the input PDF, and its final path is printed to stdout.
 
 ```shell
-python pdf2docx.py input.pdf -o output.docx
+pdf2word-pro input.pdf -o output.docx
 ```
 
 ---
@@ -67,7 +73,7 @@ python pdf2docx.py input.pdf -o output.docx
 ## 4. Command-line options
 
 ```text
-usage: pdf2docx.py [-h] [-o OUTPUT] [--pages PAGES] [--password ***]
+usage: pdf2word-pro [-h] [-o OUTPUT] [--pages PAGES] [--password ***]
                    [--keep-page-breaks] [--no-columns] [--no-figures]
                    [--no-headings] [--no-header-footer]
                    [--remove-page-head-foot] [--no-fonts] [--dpi DPI]
@@ -119,48 +125,45 @@ Assuming `-o output.docx`:
 ### 6.1 Convert the whole document
 
 ```shell
-python pdf2docx.py input.pdf -o output.docx
+pdf2word-pro input.pdf -o output.docx
 ```
 
 ### 6.2 Convert only a few pages (most common for layout regression)
 
 ```shell
-python pdf2docx.py input.pdf -o sample.docx --pages 12-14,20
+pdf2word-pro input.pdf -o sample.docx --pages 12-14,20
 ```
 
 ### 6.3 Speed up a long document with multiple processes
 
 ```shell
-python pdf2docx.py input.pdf -o output-job8.docx --jobs 8
+pdf2word-pro input.pdf -o output-job8.docx --jobs 8
 ```
 
 ### 6.4 Remove headers and footers (keeping the full version)
 
 ```shell
-python pdf2docx.py input.pdf -o output.docx --remove-page-head-foot
+pdf2word-pro input.pdf -o output.docx --remove-page-head-foot
 # produces: output.docx, output-no-head-foot.docx, output-page-head-foot.json
 ```
 
 ### 6.5 Encrypted PDF
 
 ```shell
-python pdf2docx.py encrypted.pdf -o decrypted.docx --password "***"
+pdf2word-pro encrypted.pdf -o decrypted.docx --password "***"
 ```
 
 ### 6.6 Keep original page breaks and disable column detection (layout inspection)
 
 ```shell
-python pdf2docx.py input.pdf -o output-layout.docx `
+pdf2word-pro input.pdf -o output-layout.docx `
   --keep-page-breaks --no-columns --cache-page --cache-dir _dbg -v
 ```
 
 ### 6.7 Use it as a library
 
 ```python
-import sys
-sys.path.insert(0, r"<directory containing pdf2docx.py>")   # if that directory is not on sys.path
-
-from pdf2docx import Config, pdf_to_docx
+from pdf2word_pro import Config, pdf_to_docx
 
 cfg = Config(pages={45, 46, 47}, image_dpi=300, jobs=4)   # pages are 0-based
 out = pdf_to_docx("input.pdf", "output.docx", cfg)
@@ -215,8 +218,15 @@ This is the most error-prone part of any PDF-to-Word conversion. Key decisions:
 ## 10. Repository layout
 
 ```text
-pdf2docx.py        main program (single file)
-requirements.txt   dependency list
-README.md          Chinese documentation
-README_EN.md       this file
+pyproject.toml           packaging config (PEP 621 / setuptools)
+LICENSE                  MIT license
+requirements.txt         dependency list
+README.md                Chinese documentation
+README_EN.md             this file
+pdf2docx.py              legacy entry point
+src/pdf2word_pro/        package source
+  core.py                converter implementation
+  cli.py                 command-line entry
+  __main__.py            python -m entry
+  __init__.py            public API
 ```

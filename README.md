@@ -1,11 +1,10 @@
-[中文](README.md) | [English](README_EN.md)
+[中文](https://github.com/wqzh/pdf2word/blob/main/README.md) | [English](https://github.com/wqzh/pdf2word/blob/main/README_EN.md)
 
-
-# pdf2docx.py
+# pdf2word-pro
 
 把 PDF 转成 Word（`.docx`）的命令行工具，目标是**尽量保留原 PDF 的版面**：段落、字体字号、表格（含合并单元格与底色）、图片（含并排插图与图注）、页眉页脚、分页与页面尺寸。
 
-本仓库里的单文件自研实现（`pdf2docx.py`），只依赖 `pdfplumber` 做 PDF 底层解析、`python-docx` 做 Word 组装。
+纯 Python 自研实现，只依赖 `pdfplumber` 做 PDF 底层解析、`python-docx` 做 Word 组装。安装后命令行入口为 `pdf2word-pro`，同时支持 `python -m pdf2word_pro`；仓库内仍保留 `python pdf2docx.py` 旧入口。
 
 ---
 
@@ -45,7 +44,14 @@
 ### 安装
 
 ```shell
+pip install pdf2word-pro
+```
+
+从源码安装（开发用）：
+
+```shell
 pip install -r requirements.txt
+pip install -e .
 ```
 
 ---
@@ -53,13 +59,13 @@ pip install -r requirements.txt
 ## 3. 快速开始
 
 ```shell
-python pdf2docx.py input.pdf
+pdf2word-pro input.pdf
 ```
 
 不指定 `-o` 时，输出文件为「与 PDF 同名、同目录的 `.docx`」，并把最终路径打印到标准输出。
 
 ```shell
-python pdf2docx.py input.pdf -o output.docx
+pdf2word-pro input.pdf -o output.docx
 ```
 
 ---
@@ -67,7 +73,7 @@ python pdf2docx.py input.pdf -o output.docx
 ## 4. 命令行参数
 
 ```text
-usage: pdf2docx.py [-h] [-o OUTPUT] [--pages PAGES] [--password PASSWORD]
+usage: pdf2word-pro [-h] [-o OUTPUT] [--pages PAGES] [--password PASSWORD]
                    [--keep-page-breaks] [--no-columns] [--no-figures]
                    [--no-headings] [--no-header-footer]
                    [--remove-page-head-foot] [--no-fonts] [--dpi DPI]
@@ -119,48 +125,45 @@ usage: pdf2docx.py [-h] [-o OUTPUT] [--pages PAGES] [--password PASSWORD]
 ### 6.1 整篇转换
 
 ```shell
-python pdf2docx.py input.pdf -o output.docx
+pdf2word-pro input.pdf -o output.docx
 ```
 
 ### 6.2 只检查某几页（排版回归时最常用）
 
 ```shell
-python pdf2docx.py input.pdf -o sample.docx --pages 12-14,20
+pdf2word-pro input.pdf -o sample.docx --pages 12-14,20
 ```
 
 ### 6.3 长文档多进程加速
 
 ```shell
-python pdf2docx.py input.pdf -o output-job8.docx --jobs 8
+pdf2word-pro input.pdf -o output-job8.docx --jobs 8
 ```
 
 ### 6.4 去掉页眉页脚（同时保留完整版）
 
 ```shell
-python pdf2docx.py input.pdf -o output.docx --remove-page-head-foot
+pdf2word-pro input.pdf -o output.docx --remove-page-head-foot
 # 产出：output.docx、output-no-head-foot.docx、output-page-head-foot.json
 ```
 
 ### 6.5 加密 PDF
 
 ```shell
-python pdf2docx.py encrypted.pdf -o decrypted.docx --password "你的密码"
+pdf2word-pro encrypted.pdf -o decrypted.docx --password "你的密码"
 ```
 
 ### 6.6 保留原始分页 + 关闭双栏识别（用于核对版面）
 
 ```shell
-python pdf2docx.py input.pdf -o output-layout.docx `
+pdf2word-pro input.pdf -o output-layout.docx `
   --keep-page-breaks --no-columns --cache-page --cache-dir _dbg -v
 ```
 
 ### 6.7 作为库调用
 
 ```python
-import sys
-sys.path.insert(0, r"<pdf2docx.py 所在目录>")   # 若该目录不在 sys.path 中
-
-from pdf2docx import Config, pdf_to_docx
+from pdf2word_pro import Config, pdf_to_docx
 
 cfg = Config(pages={45, 46, 47}, image_dpi=300, jobs=4)   # pages 为 0 基页码
 out = pdf_to_docx("input.pdf", "output.docx", cfg)
@@ -215,7 +218,15 @@ print(out)
 ## 10. 目录结构
 
 ```text
-pdf2docx.py        主程序（单文件实现）
-requirements.txt   依赖清单
-README.md          本文件
+pyproject.toml            打包配置（PEP 621 / setuptools）
+LICENSE                   MIT 许可证
+requirements.txt          依赖清单
+README.md                 本文件
+README_EN.md              英文说明
+pdf2docx.py               兼容入口（旧命令）
+src/pdf2word_pro/         包源码
+  core.py                 转换实现（原 pdf2docx.py）
+  cli.py                  命令行入口
+  __main__.py             python -m 入口
+  __init__.py             对外接口
 ```
